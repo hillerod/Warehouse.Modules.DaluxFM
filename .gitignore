@@ -4,6 +4,18 @@
 # Azure Functions localsettings file
 local.settings.json
 
+# Personal
+_[Oo]ld/
+Files/
+Properties/
+local.settings.json
+local.settings.ps1
+appsettings.json
+host.json
+.gitignore
+.gitattributes
+.vscode/
+
 # User-specific files
 *.suo
 *.user

@@ -9,7 +9,7 @@ namespace DaluxFM
 {
     public static class TimerTrigger
     {
-        [Function("TimerTrigger4")]
+        [Function("TimerTrigger5")]
         public static void Run([TimerTrigger("0 0 1 * * *")] MyInfo myTimer, FunctionContext context)
         {
             var logger = context.GetLogger("Function1");

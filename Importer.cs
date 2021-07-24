@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
-//using Warehouse.Modules.DaluxFM.Refine;
+using Warehouse.Modules.DaluxFM.Refine;
 
 namespace Warehouse.Modules.DaluxFM
 {
@@ -29,26 +29,25 @@ namespace Warehouse.Modules.DaluxFM
 
         public override IEnumerable<IRefine> Import(bool ingestToDataLake)
         {
-            //var daluxFM = new Service.WebService(Config["DaluxFMCustomerId"], Config["DaluxFMApiKey"], Config["DaluxFMUser"], Config["DaluxFMPassword"]);
-            //estatesXmlStream = daluxFM.GetEstates().Result;
-            //assetsXmlStream = daluxFM.GetAssets().Result;
+            var daluxFM = new Service.WebService(Config["DaluxFMCustomerId"], Config["DaluxFMApiKey"], Config["DaluxFMUser"], Config["DaluxFMPassword"]);
+            estatesXmlStream = daluxFM.GetEstates().Result;
+            assetsXmlStream = daluxFM.GetAssets().Result;
 
-            //var buildingsRefine = new BuildingsRefine(this, estatesXmlStream);
-            //var estatesRefine = new EstatesRefine(this, estatesXmlStream, buildingsRefine);
-            //var lotsRefine = new LotsRefine(this, estatesXmlStream);
-            //var assetsRefine = new AssetsRefine(this, assetsXmlStream, estatesRefine, buildingsRefine, Config["DaluxFMUniqueAssetColumns"]);
+            var buildingsRefine = new BuildingsRefine(this, estatesXmlStream);
+            var estatesRefine = new EstatesRefine(this, estatesXmlStream, buildingsRefine);
+            var lotsRefine = new LotsRefine(this, estatesXmlStream);
+            var assetsRefine = new AssetsRefine(this, assetsXmlStream, estatesRefine, buildingsRefine, Config["DaluxFMUniqueAssetColumns"]);
 
-            //if (ingestToDataLake)
-            //{
-            //    var fileDate = DateTime.UtcNow;
-            //    estatesRefine.UploadFile(Config, fileDate, "xml", estatesXmlStream, true, true, true, false);
-            //    buildingsRefine.UploadFile(Config, fileDate, true, true, false);
-            //    lotsRefine.UploadFile(Config, fileDate, true, true, false);
-            //    assetsRefine.UploadFile(Config, fileDate, "xml", assetsXmlStream, true, true, true, false);
-            //}
+            if (ingestToDataLake)
+            {
+                var fileDate = DateTime.UtcNow;
+                estatesRefine.UploadFile(Config, fileDate, "xml", estatesXmlStream, true, true, true, false);
+                buildingsRefine.UploadFile(Config, fileDate, true, true, false);
+                lotsRefine.UploadFile(Config, fileDate, true, true, false);
+                assetsRefine.UploadFile(Config, fileDate, "xml", assetsXmlStream, true, true, true, false);
+            }
 
-            //return new List<IRefine> { estatesRefine, buildingsRefine, lotsRefine };
-            return default;
+            return new List<IRefine> { estatesRefine, buildingsRefine, lotsRefine };
         }
     }
 }
