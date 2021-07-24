@@ -9,8 +9,8 @@ namespace DaluxFM
 {
     public static class TimerTrigger
     {
-        [Function("TimerTrigger5")]
-        public static void Run([TimerTrigger("0 0 1 * * *")] MyInfo myTimer, FunctionContext context)
+        [Function("TimerTrigger6")]
+        public static void Run([TimerTrigger("%ScheduleExpression%", RunOnStartup = true)] MyInfo myTimer, FunctionContext context)
         {
             var logger = context.GetLogger("Function1");
             logger.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
