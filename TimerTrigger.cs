@@ -1,17 +1,24 @@
 using System;
+using System.IO;
+using Bygdrift.Warehouse.Modules;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace DaluxFM
 {
     public static class TimerTrigger
     {
-        [Function("TimerTrigger2")]
+        [Function("TimerTrigger3")]
         public static void Run([TimerTrigger("0 */5 * * * *")] MyInfo myTimer, FunctionContext context)
         {
             var logger = context.GetLogger("Function1");
             logger.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
             logger.LogInformation($"Next timer schedule at: {myTimer.ScheduleStatus.Next}");
+
+            var config = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("local.settings.json", optional: true, reloadOnChange: true).AddEnvironmentVariables().Build();
+            var importer = new Warehouse.Modules.DaluxFM.Importer(config, logger);
+            importer.Run(true);
         }
     }
 
