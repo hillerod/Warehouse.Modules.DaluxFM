@@ -4,28 +4,30 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using System;
 
-
-namespace Warehouse.Modules.DaluxFM.Refine
+namespace Module.Refine
 {
     public class AssetsRefine : RefineBase
     {
-        private readonly IRefine estates;
-        private readonly IRefine buildings;
+        private readonly RefineBase estates;
+        private readonly RefineBase buildings;
         private readonly string uniqueHeaders;
 
         public XDocument Data { get; set; }
-        public AssetsRefine(IImporter exporter, Stream xmlStream, IRefine estates, IRefine buildings, string uniqueHeaders) : base(exporter, "assets")
+        public AssetsRefine(ImportBase importer, Stream xmlStream, RefineBase estates, RefineBase buildings, string uniqueHeaders) : base(importer, "Assets")
         {
             xmlStream.Position = 0;
             Data = XDocument.Load(xmlStream);
             this.estates = estates;
             this.buildings = buildings;
             this.uniqueHeaders = uniqueHeaders;
-            Refine();
+            CreateCsv();
+            ImportRawFileToDataLake(DateTime.UtcNow, "xml", xmlStream);
+            ImportCsvFileToDataLake(DateTime.UtcNow);
         }
 
-        public override void Refine()
+        public  void CreateCsv()
         {
             var daluxGenericWash = new GenericHelper();
 
@@ -36,8 +38,29 @@ namespace Warehouse.Modules.DaluxFM.Refine
                 daluxGenericWash.AddLayerDatas(r, element, CsvSet);
                 r++;
             }
+            ConvertDateTime();
             AddBuildingReferenceColumn();
             VerifyUniqueColumns();
+        }
+
+        /// <summary>
+        /// DateTime is wrong
+        /// </summary>
+        private void ConvertDateTime()
+        {
+            var createdCol = CsvSet.GetRecordCol("CreatedDate");
+            foreach (var item in createdCol.Records)
+            {
+                var val = DateTime.Parse(item.Value.ToString());
+                CsvSet.UpdateRecord(createdCol.Col, item.Key, val);
+            }
+
+            var modifiedCol = CsvSet.GetRecordCol("LastModifiedDate");
+            foreach (var item in modifiedCol.Records)
+            {
+                var val = DateTime.Parse(item.Value.ToString());
+                CsvSet.UpdateRecord(modifiedCol.Col, item.Key, val);
+            }
         }
 
         /// <summary>

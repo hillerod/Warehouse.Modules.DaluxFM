@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Warehouse.Modules.DaluxFM.Service
+namespace Module.Service
 {
     public class WebService
     {

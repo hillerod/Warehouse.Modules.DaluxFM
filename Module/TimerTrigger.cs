@@ -1,11 +1,10 @@
 using System;
 using System.IO;
-using Bygdrift.Warehouse.Modules;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace DaluxFM
+namespace Module
 {
     public static class TimerTrigger
     {
@@ -17,8 +16,8 @@ namespace DaluxFM
             logger.LogInformation($"Next timer schedule at: {myTimer.ScheduleStatus.Next}");
 
             var config = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("local.settings.json", optional: true, reloadOnChange: true).AddEnvironmentVariables().Build();
-            var importer = new Warehouse.Modules.DaluxFM.Importer(config, logger);
-            importer.Run(true);
+            var importer = new Importer(config, logger);
+            importer.ImportToDataLake(importer.GetRefines());
         }
     }
 

@@ -4,23 +4,26 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using System;
 
-namespace Warehouse.Modules.DaluxFM.Refine
+namespace Module.Refine
 {
     public class EstatesRefine : RefineBase
     {
         public XDocument Data { get; set; }
-        private readonly IRefine buildings;
+        private readonly RefineBase buildings;
 
-        public EstatesRefine(IImporter exporter, Stream xmlStream, IRefine buildings) : base(exporter, "estates")
+        public EstatesRefine(ImportBase importer, Stream xmlStream, RefineBase buildings) : base(importer, "Estates")
         {
             xmlStream.Position = 0;
             Data = XDocument.Load(xmlStream);
             this.buildings = buildings;
-            Refine();
+            CreateCsv();
+            ImportRawFileToDataLake(DateTime.UtcNow, "xml", xmlStream);
+            ImportCsvFileToDataLake(DateTime.UtcNow);
         }
 
-        public override void Refine()
+        public void CreateCsv()
         {
             var r = 0;
             CsvSet.AddHeader("latitude", out int estLatCol);
@@ -55,7 +58,7 @@ namespace Warehouse.Modules.DaluxFM.Refine
             }
         }
 
-        private void AddEstatesBuildingsCountColumn(IRefine buildings)
+        private void AddEstatesBuildingsCountColumn(RefineBase buildings)
         {
             var estateCol_EstateBuildings = CsvSet.Headers.Count;
             CsvSet.AddHeader(estateCol_EstateBuildings, "Buildings");

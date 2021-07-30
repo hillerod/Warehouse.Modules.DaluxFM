@@ -7,7 +7,13 @@ The data data lake, is structured as a Common Data Model (CMD), which enables an
 
 The module uses DaluxFM's SOAP web service. Soon this module will be transformed to use DaluxFM OpenAPI 
 
-# Install procedure
+# Testing module
+
+If you want to test the module, then download the project and open it with Visual Studio or Visual Studio Code.
+Fill out the settings in `ModuleTests/appsettings.json`.
+Debug the file: `ModuleTests/ImporterTest.cs`, by opening the file, right-click `TestRunModule()`and select 'Debug test(s)'.
+
+# Install on Azure
 
 ## Prerequisites
 
@@ -34,6 +40,7 @@ if((az storage account check-name --name $storageAccount --query nameAvailable) 
 	Write-Host "The storage account name: '"$storageAccount"' already exists."  -ForegroundColor Red
 	exit
 }
+
 az group create -g $group -l westeurope
 az storage account create -n $storageaccount -g $group -l westeurope --sku Standard_GRS --kind StorageV2 --enable-hierarchical-namespace true
 az config set extension.use_dynamic_install=yes_without_prompt
@@ -54,10 +61,10 @@ $moduleName = "moduleDaluxFM" # The name on module (the function app)
 ### Variables to be set before run (app settings):
 $DataLakeBasePath = "warehouse" # The base name in the data lake, where data from all the modules are stored.
 $ScheduleExpression = "0 0 1 * * *" # How often this module should run. This example runs each night at 1AM UTC. Read more here: https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer?tabs=csharp#ncrontab-expressions
-$DaluxFMCustomerId = "" # The Id that for the current user. I Hiller�d Kommune it is hillerod
-$DaluxFMApiKey = "" # Contact Dalux, to get a key to: https://fm-aws-api.dalux.com/sharedservices/externaldataaccessservice.asmx
+$DaluxFMCustomerId = "" # The Id that for the current user. In Hillerød Kommune it is hillerod
 $DaluxFMUser = "" # A user that you can create in DaluxFM that has access to buildings and assets
 $DaluxFMPassword = "" # the users password
+$DaluxFMApiKey = "" # Contact Dalux and get a key to: https://fm-aws-api.dalux.com/sharedservices/externaldataaccessservice.asmx
 $DaluxFMUniqueAssetColumns = "" # A comma seperated list of headers in assets, that should be checked for to se if they contain redundant data and if so, it will raise an error. Can be left blank. 
 
 Write-Host "Add function app:"  -ForegroundColor Green
@@ -84,12 +91,13 @@ DaluxFMUniqueAssetColumns=$DaluxFMUniqueAssetColumns
 The module will run immediately after it has been installed. The process with fetching and storing data, takes around 3 minutes for 'Hillerød Kommunes' portfolio.
 You should should be able to se the data in the storage account after the run is finished.
 
-## Update this modules installation
+## Manually update the module
 
 Each time a new version of this module gets released on GitHub, the module will automatic update on Azure (called ci/cd).
-If you want to turn this off, then replace 'az functionapp create...' with: `az functionapp create -n $moduleName -g $group --consumption-plan-location westeurope --storage-account $storageAccount --app-insights appInsights --functions-version 3 --runtime dotnet-isolated --runtime-version 5.0`. 
-And add this line: `az functionapp deployment source config -n $moduleName -g $group --branch master --manual-integration --repo-url https://github.com/hillerod/Warehouse.Modules.DaluxFM`.
-Then run this command, each time you want to update the module: `az functionapp deployment source sync -n $moduleName -g $group`.
+If you want to turn this off, then:
+- Replace 'az functionapp create...' with: `az functionapp create -n $moduleName -g $group --consumption-plan-location westeurope --storage-account $storageAccount --app-insights appInsights --functions-version 3 --runtime dotnet-isolated --runtime-version 5.0`. 
+- Add this line: `az functionapp deployment source config -n $moduleName -g $group --branch master --manual-integration --repo-url https://github.com/hillerod/Warehouse.Modules.DaluxFM`.
+- Run this command, each time you want to update the module: `az functionapp deployment source sync -n $moduleName -g $group`.
 
 ## Trace problems
 
@@ -99,7 +107,6 @@ There are even better feedback when monitoring your function apps in Visual Stud
 ## Remove this module from the environment
 
 ```powershell
-$group = "warehouse" # The name on the resource group (the same as used when setting up the environment)
 az functionapp delete -n moduleDaluxFM -g $group
 ```
 
@@ -108,15 +115,14 @@ az functionapp delete -n moduleDaluxFM -g $group
 The whole setup can be removed again by deleting the resource group:
 
 ```powershell
-$group = "warehouse" # The name on the resource group (the same as used when setting up the environment)
 az group delete -g $group
 ```
 
-# Get access from Power BI
+# Establish access from Power BI to the storage account
 
-To create a dataflow from Azure Data Lak0 [ADLS], the ADLS account must be in the same tenant as PowerBI.
+To create a dataflow from Azure Data Lake, the storage account must be in the same tenant as PowerBI!
 
-The user that sets up the data flow, has to have access to ADLS.
+The user that sets up the data flow, must have access to the storage account:
 - In Azure web portal, go into the storage account
 - Select 'Access Control (IAM)'
 - Select Add, and then 'Add role assignment'

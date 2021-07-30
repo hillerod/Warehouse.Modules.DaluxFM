@@ -1,21 +1,23 @@
 ﻿using Bygdrift.Warehouse.Modules;
+using System;
 using System.IO;
 using System.Xml.Linq;
 
-namespace Warehouse.Modules.DaluxFM.Refine
+namespace Module.Refine
 {
     public class LotsRefine : RefineBase
     {
         public XDocument Data { get; set; }
 
-        public LotsRefine(IImporter exporter, Stream xmlStream) : base(exporter, "lots")
+        public LotsRefine(ImportBase importer, Stream xmlStream) : base(importer, "Lots")
         {
             xmlStream.Position = 0;
             Data = XDocument.Load(xmlStream);
-            Refine();
+            CreateCsv();
+            ImportCsvFileToDataLake(DateTime.UtcNow);
         }
 
-        public override void Refine()
+        public void CreateCsv()
         {
             var r = 0;
             var genericHelper = new GenericHelper();

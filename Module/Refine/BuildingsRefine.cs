@@ -3,21 +3,23 @@ using Bygdrift.Warehouse.DataLake.CsvTools;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
+using System;
 
-namespace Warehouse.Modules.DaluxFM.Refine
+namespace Module.Refine
 {
     public class BuildingsRefine : RefineBase
     {
         public XDocument Data { get; set; }
 
-        public BuildingsRefine(IImporter exporter, Stream xmlStream) : base(exporter, "buildings")
+        public BuildingsRefine(ImportBase importer, Stream xmlStream) : base(importer, "Buildings")
         {
             xmlStream.Position = 0;
             Data = XDocument.Load(xmlStream);
-            Refine();
+            CreateCsv();
+            ImportCsvFileToDataLake(DateTime.UtcNow);
         }
 
-        public override void Refine()
+        public void CreateCsv()
         {
             var r = 0;
             CsvSet.AddHeader("latitude", out int buildLatCol);

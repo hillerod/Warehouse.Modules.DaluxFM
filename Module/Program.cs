@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using System.Threading.Tasks;
 
-namespace DaluxFM
+namespace Module
 {
     public class Program
     {
