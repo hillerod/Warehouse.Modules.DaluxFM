@@ -1,0 +1,235 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.4.1124.51302",
+      "templateHash": "4869025798408803166"
+    }
+  },
+  "parameters": {
+    "DaluxCustomerId": {
+      "type": "string",
+      "metadata": {
+        "description": "ID used when loging in on Dalux"
+      }
+    },
+    "DaluxUser": {
+      "type": "string",
+      "metadata": {
+        "description": "Mail on a user that has access to Dalux"
+      }
+    },
+    "DaluxPassword": {
+      "type": "secureString",
+      "metadata": {
+        "description": "The password on the user"
+      }
+    },
+    "DaluxFMSoapKey": {
+      "type": "secureString",
+      "metadata": {
+        "description": "An ID that you can get by contacting Dalux and say that it is to their web service. The Id would look like: f07axb-ex28-49ax-b3xd-faxa01217dd5"
+      }
+    },
+    "DownloadFileApiKey": {
+      "type": "string",
+      "defaultValue": "[newGuid()]",
+      "metadata": {
+        "description": "An arbitrary GUID, made by your own fantasy that is used in all links used to download files from the datalake through a appFunction service"
+      }
+    },
+    "DaysBetweenLoadingDrawings": {
+      "type": "int",
+      "defaultValue": 7,
+      "metadata": {
+        "description": "The operation takes quite a while, so do not do this each day"
+      }
+    },
+    "ScheduleImportEstatesAndAssets": {
+      "type": "string",
+      "defaultValue": "0 0 1 * * *",
+      "metadata": {
+        "description": "How often this module should run. This example runs each night at 1AM UTC. Read more here: https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer?tabs=csharp#ncrontab-expressions"
+      }
+    },
+    "moduleName": {
+      "type": "string",
+      "defaultValue": "DaluxFM",
+      "metadata": {
+        "description": "The name of the module. Only use between 3-24 letters or numers, or the Warehouse can't function. The functionApp gets the same name followed by the \"-resourceGroup.id\". The modulename is hard to change later, so try to keep it static. It is used in dataLake and databse as an identifier of data that comes from this app"
+      },
+      "maxLength": 24,
+      "minLength": 3
+    },
+    "TimeZoneId": {
+      "type": "string",
+      "defaultValue": "Romance Standard Time",
+      "metadata": {
+        "description": "\"Romance Standard Time\" is Copenhagen. For other timezones, find them here: https://raw.githubusercontent.com/Bygdrift/Warehouse/master/Docs/TimeZoneIds.csv"
+      }
+    }
+  },
+  "variables": {
+    "functionAppName": "[format('{0}-{1}', parameters('moduleName'), uniqueString(resourceGroup().id))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2019-09-01",
+      "name": "[format('{0}/{1}', format('keyvault-{0}', uniqueString(resourceGroup().id)), format('Secret--{0}--DaluxCustomerId', parameters('moduleName')))]",
+      "properties": {
+        "value": "[parameters('DaluxCustomerId')]"
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2019-09-01",
+      "name": "[format('{0}/{1}', format('keyvault-{0}', uniqueString(resourceGroup().id)), format('Secret--{0}--DaluxUser', parameters('moduleName')))]",
+      "properties": {
+        "value": "[parameters('DaluxUser')]"
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2019-09-01",
+      "name": "[format('{0}/{1}', format('keyvault-{0}', uniqueString(resourceGroup().id)), format('Secret--{0}--DaluxPassword', parameters('moduleName')))]",
+      "properties": {
+        "value": "[parameters('DaluxPassword')]"
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2019-09-01",
+      "name": "[format('{0}/{1}', format('keyvault-{0}', uniqueString(resourceGroup().id)), format('Secret--{0}--DaluxFMSoapKey', parameters('moduleName')))]",
+      "properties": {
+        "value": "[parameters('DaluxFMSoapKey')]"
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2019-09-01",
+      "name": "[format('{0}/{1}', format('keyvault-{0}', uniqueString(resourceGroup().id)), format('Secret--{0}--DownloadFileApiKey', parameters('moduleName')))]",
+      "properties": {
+        "value": "[parameters('DownloadFileApiKey')]"
+      }
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2020-10-01",
+      "name": "[format('windows-{0}', uniqueString(resourceGroup().id))]",
+      "location": "[resourceGroup().location]",
+      "kind": "functionapp",
+      "sku": {
+        "name": "Y1",
+        "tier": "Dynamic"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2021-02-01",
+      "name": "[variables('functionAppName')]",
+      "kind": "functionapp",
+      "location": "[resourceGroup().location]",
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', format('windows-{0}', uniqueString(resourceGroup().id)))]",
+        "siteConfig": {
+          "appSettings": [
+            {
+              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+              "value": "[reference(resourceId('Microsoft.Insights/components', 'applicationInsights'), '2020-02-02-preview').InstrumentationKey]"
+            },
+            {
+              "name": "AzureWebJobsStorage",
+              "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', format('appstorage{0}', uniqueString(resourceGroup().id)), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', format('appstorage{0}', uniqueString(resourceGroup().id))), '2019-06-01').keys[0].value)]"
+            },
+            {
+              "name": "FUNCTIONS_EXTENSION_VERSION",
+              "value": "~4"
+            },
+            {
+              "name": "FUNCTIONS_WORKER_RUNTIME",
+              "value": "dotnet"
+            },
+            {
+              "name": "HostName",
+              "value": "[format('{0}.azurewebsites.net', variables('functionAppName'))]"
+            },
+            {
+              "name": "ModuleName",
+              "value": "[parameters('moduleName')]"
+            },
+            {
+              "name": "Setting--DaysBetweenLoadingDrawings",
+              "value": "[parameters('DaysBetweenLoadingDrawings')]"
+            },
+            {
+              "name": "Setting--ScheduleImportEstatesAndAssets",
+              "value": "[parameters('ScheduleImportEstatesAndAssets')]"
+            },
+            {
+              "name": "TimeZoneId",
+              "value": "[parameters('TimeZoneId')]"
+            },
+            {
+              "name": "VaultUri",
+              "value": "[reference(resourceId('Microsoft.KeyVault/vaults', format('keyvault-{0}', uniqueString(resourceGroup().id))), '2019-09-01').vaultUri]"
+            },
+            {
+              "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+              "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', format('appstorage{0}', uniqueString(resourceGroup().id)), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', format('appstorage{0}', uniqueString(resourceGroup().id))), '2019-06-01').keys[0].value)]"
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', format('windows-{0}', uniqueString(resourceGroup().id)))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Web/sites/sourcecontrols",
+      "apiVersion": "2021-01-01",
+      "name": "[format('{0}/web', variables('functionAppName'))]",
+      "properties": {
+        "repoUrl": "https://github.com/hillerod/Warehouse.Modules.DaluxFM",
+        "branch": "master",
+        "isManualIntegration": true
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/accessPolicies",
+      "apiVersion": "2021-06-01-preview",
+      "name": "[format('{0}/add', format('keyvault-{0}', uniqueString(resourceGroup().id)))]",
+      "properties": {
+        "accessPolicies": [
+          {
+            "objectId": "[reference(resourceId('Microsoft.Web/sites', variables('functionAppName')), '2021-02-01', 'full').identity.principalId]",
+            "permissions": {
+              "secrets": [
+                "get",
+                "list"
+              ]
+            },
+            "tenantId": "[reference(resourceId('Microsoft.Web/sites', variables('functionAppName')), '2021-02-01', 'full').identity.tenantId]"
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
+      ]
+    }
+  ],
+  "outputs": {
+    "functionAppName": {
+      "type": "string",
+      "value": "[variables('functionAppName')]"
+    }
+  }
+}

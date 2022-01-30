@@ -1,0 +1,27 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "DaluxCustomerId": {
+            "value": "ID used when loging in on Dalux"
+        },
+        "DaluxUser": {
+            "value": "Mail on a user that has access to Dalux"
+        },
+        "DaluxPassword": {
+            "value": "The password on the user"
+        },
+        "DaluxFMSoapKey": {
+            "value": "An ID that you can get by contacting Dalux and say that it is to their web service. The Id would look like: f07bxb-ex28-49ax-b3xd-faxa01217dd5"
+        },
+        "DaysBetweenLoadingDrawings": {
+            "value": 7
+        },
+        "moduleName": {
+            "value": "DaluxFM"
+        },
+        "ScheduleImportEstatesAndAssets": {
+            "value": "0 0 1 * * *"
+        }
+    }
+}
