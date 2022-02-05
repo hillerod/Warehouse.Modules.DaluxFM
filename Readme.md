@@ -10,13 +10,16 @@ By saving data to a MS SQL database, it is:
 
 The module uses DaluxFM's SOAP web service that right now, is the best approach to fetch data from DaluxFM. There is another module here, that uses [DaluxFM API](https://github.com/Bygdrift/Warehouse.Modules.DaluxFMApi).
 
+Short video on how to setup a Bygdrift Warehouse and install the DaluxFM Module without deeper explanations (it's in English):
+<div align="left">
+      <a href="https://www.youtube.com/watch?v=ahREssLMLG0">
+         <img src="https://img.youtube.com/vi/ahREssLMLG0/0.jpg">
+      </a>
+</div>
+
 ## Installation
 
 All modules can be installed and facilitated with ARM templates (Azure Resource Management): [Use ARM templates to setup and maintain this module](https://github.com/hillerod/Warehouse.Modules.DaluxFM/tree/master/Deploy).
-
-## License
-
-[MIT License](https://github.com/Bygdrift/Warehouse.Modules.Example/blob/master/License.md)
 
 ## Database content
 
@@ -214,3 +217,7 @@ The folder `Refine` contains the refined data as csv - one folder for each day. 
 In 1.3.4, all user settings should have a prefix of 'Setting--'. That has been removed, so when upgrading from 1.3.4, then go this module's Configuration and change these app settings:
 - `Setting--DaysBetweenLoadingDrawings` to `DaysBetweenLoadingDrawings`
 - `Setting--ScheduleImportEstatesAndAssets` to `ScheduleImportEstatesAndAssets`
+
+# License
+
+[MIT License](https://github.com/Bygdrift/Warehouse.Modules.Example/blob/master/License.md)
