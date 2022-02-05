@@ -17,11 +17,14 @@
         "DaysBetweenLoadingDrawings": {
             "value": 7
         },
-        "moduleName": {
+        "ModuleName": {
             "value": "DaluxFM"
         },
         "ScheduleImportEstatesAndAssets": {
             "value": "0 0 1 * * *"
+        },
+        "TimeZoneId": {
+            "value": "Romance Standard Time"
         }
     }
 }

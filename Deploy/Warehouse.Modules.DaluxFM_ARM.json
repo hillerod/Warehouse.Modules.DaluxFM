@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1124.51302",
-      "templateHash": "4869025798408803166"
+      "templateHash": "15112960193538907053"
     }
   },
   "parameters": {
@@ -54,7 +54,7 @@
         "description": "How often this module should run. This example runs each night at 1AM UTC. Read more here: https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer?tabs=csharp#ncrontab-expressions"
       }
     },
-    "moduleName": {
+    "ModuleName": {
       "type": "string",
       "defaultValue": "DaluxFM",
       "metadata": {
@@ -72,13 +72,13 @@
     }
   },
   "variables": {
-    "functionAppName": "[format('{0}-{1}', parameters('moduleName'), uniqueString(resourceGroup().id))]"
+    "functionAppName": "[format('{0}-{1}', parameters('ModuleName'), uniqueString(resourceGroup().id))]"
   },
   "resources": [
     {
       "type": "Microsoft.KeyVault/vaults/secrets",
       "apiVersion": "2019-09-01",
-      "name": "[format('{0}/{1}', format('keyvault-{0}', uniqueString(resourceGroup().id)), format('Secret--{0}--DaluxCustomerId', parameters('moduleName')))]",
+      "name": "[format('{0}/{1}', format('keyvault-{0}', uniqueString(resourceGroup().id)), format('Secret--{0}--DaluxCustomerId', parameters('ModuleName')))]",
       "properties": {
         "value": "[parameters('DaluxCustomerId')]"
       }
@@ -86,7 +86,7 @@
     {
       "type": "Microsoft.KeyVault/vaults/secrets",
       "apiVersion": "2019-09-01",
-      "name": "[format('{0}/{1}', format('keyvault-{0}', uniqueString(resourceGroup().id)), format('Secret--{0}--DaluxUser', parameters('moduleName')))]",
+      "name": "[format('{0}/{1}', format('keyvault-{0}', uniqueString(resourceGroup().id)), format('Secret--{0}--DaluxUser', parameters('ModuleName')))]",
       "properties": {
         "value": "[parameters('DaluxUser')]"
       }
@@ -94,7 +94,7 @@
     {
       "type": "Microsoft.KeyVault/vaults/secrets",
       "apiVersion": "2019-09-01",
-      "name": "[format('{0}/{1}', format('keyvault-{0}', uniqueString(resourceGroup().id)), format('Secret--{0}--DaluxPassword', parameters('moduleName')))]",
+      "name": "[format('{0}/{1}', format('keyvault-{0}', uniqueString(resourceGroup().id)), format('Secret--{0}--DaluxPassword', parameters('ModuleName')))]",
       "properties": {
         "value": "[parameters('DaluxPassword')]"
       }
@@ -102,7 +102,7 @@
     {
       "type": "Microsoft.KeyVault/vaults/secrets",
       "apiVersion": "2019-09-01",
-      "name": "[format('{0}/{1}', format('keyvault-{0}', uniqueString(resourceGroup().id)), format('Secret--{0}--DaluxFMSoapKey', parameters('moduleName')))]",
+      "name": "[format('{0}/{1}', format('keyvault-{0}', uniqueString(resourceGroup().id)), format('Secret--{0}--DaluxFMSoapKey', parameters('ModuleName')))]",
       "properties": {
         "value": "[parameters('DaluxFMSoapKey')]"
       }
@@ -110,7 +110,7 @@
     {
       "type": "Microsoft.KeyVault/vaults/secrets",
       "apiVersion": "2019-09-01",
-      "name": "[format('{0}/{1}', format('keyvault-{0}', uniqueString(resourceGroup().id)), format('Secret--{0}--DownloadFileApiKey', parameters('moduleName')))]",
+      "name": "[format('{0}/{1}', format('keyvault-{0}', uniqueString(resourceGroup().id)), format('Secret--{0}--DownloadFileApiKey', parameters('ModuleName')))]",
       "properties": {
         "value": "[parameters('DownloadFileApiKey')]"
       }
@@ -161,14 +161,14 @@
             },
             {
               "name": "ModuleName",
-              "value": "[parameters('moduleName')]"
+              "value": "[parameters('ModuleName')]"
             },
             {
-              "name": "Setting--DaysBetweenLoadingDrawings",
+              "name": "DaysBetweenLoadingDrawings",
               "value": "[parameters('DaysBetweenLoadingDrawings')]"
             },
             {
-              "name": "Setting--ScheduleImportEstatesAndAssets",
+              "name": "ScheduleImportEstatesAndAssets",
               "value": "[parameters('ScheduleImportEstatesAndAssets')]"
             },
             {

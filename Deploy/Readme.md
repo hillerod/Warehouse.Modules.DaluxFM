@@ -8,40 +8,15 @@ Install the [Warehouse environment](https://github.com/Bygdrift/Warehouse/tree/m
 
 ## Videos
 
-Short video on how to setup a Bygdrift Warehouse and install the DaluxFM Module without deeper explanations (it's in English):
-<div align="left">
-      <a href="https://www.youtube.com/watch?v=ahREssLMLG0">
-         <img src="https://img.youtube.com/vi/ahREssLMLG0/0.jpg">
-      </a>
-</div>
+2022-01-28: [Short video on how to setup a Bygdrift Warehouse and install the DaluxFM Module without deeper explanations](https://www.youtube.com/watch?v=ahREssLMLG0) (it's in English):
 
-How to setup the basic Bygdrift Warehouse (in Danish):
-<div align="left">
-      <a href="https://www.youtube.com/watch?v=6aR39glybhg">
-         <img src="https://img.youtube.com/vi/6aR39glybhg/0.jpg">
-      </a>
-</div>
+2022-01-28: [Setup the basic Bygdrift Warehouse](https://www.youtube.com/watch?v=6aR39glybhg) (in Danish):
 
-How to setup the Example module (in Danish). Gives a good idea of the technique:
-<div align="left">
-      <a href="https://www.youtube.com/watch?v=itwd2XdHIkM">
-         <img src="https://img.youtube.com/vi/itwd2XdHIkM/0.jpg">
-      </a>
-</div>
+2022-01-28: [Setup the Example module](https://www.youtube.com/watch?v=itwd2XdHIkM) (in Danish). Gives a good idea of the technique:
 
-How to setup the DaluxFM module (in Danish):
-<div align="left">
-      <a href="https://www.youtube.com/watch?v=xKkY_nAtV4c">
-         <img src="https://img.youtube.com/vi/xKkY_nAtV4c/0.jpg">
-      </a>
-</div>
+2022-01-28: [Setup the DaluxFM module](https://www.youtube.com/watch?v=xKkY_nAtV4c) (in Danish):
 
-How to update an already installed module, once a new update has been pushed to GitHub (in Danish):
-<div align="left">
-      <a href="https://www.youtube.com/watch?v=XywfV_n-320">
-         <img src="https://img.youtube.com/vi/XywfV_n-320/0.jpg">
-      </a>
-</div>
+2022-01-28: [Update an already installed module, once a new update has been pushed to GitHub](https://www.youtube.com/watch?v=XywfV_n-320) (in Danish):
 
 ## Setup the Warehouse environment with the portal:
 

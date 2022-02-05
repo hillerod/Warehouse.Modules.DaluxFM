@@ -2,7 +2,7 @@
 
 This module, fetches data from [DaluxFM](https://www.dalux.com/da/fm-overview/) each day, and stores it into your own data warehouse on Azure.
 
-The module is build with [Bygdrift Warehouse](https://github.com/Bygdrift/Warehouse), that enables one to attach multiple modules within the same azure environment, that can collects and wash data from all kinds of services, in a cheap data lake and database.
+The module is build with [Bygdrift Warehouse](https://github.com/Bygdrift/Warehouse), that enables one to attach multiple modules within the same azure environment, that can collect and wash data from all kinds of services, in a cheap data lake and database.
 By saving data to a MS SQL database, it is:
 - easy to fetch data with Power BI, Excel and other systems
 - easy to control who has access to what - actually, it can be controlled with AD so you don't have to handle credentials
@@ -207,3 +207,10 @@ The folder `Refine` contains the refined data as csv - one folder for each day. 
                 - Lots.csv
                 - Rooms.csv
 
+# Updates
+
+## 1.3.5
+
+In 1.3.4, all user settings should have a prefix of 'Setting--'. That has been removed, so when upgrading from 1.3.4, then go this module's Configuration and change these app settings:
+- `Setting--DaysBetweenLoadingDrawings` to `DaysBetweenLoadingDrawings`
+- `Setting--ScheduleImportEstatesAndAssets` to `ScheduleImportEstatesAndAssets`

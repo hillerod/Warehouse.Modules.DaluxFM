@@ -5,7 +5,7 @@ namespace Module
 {
     public class Settings
     {
-        /// <summary>ID used when loging in on Dalux. In Hillerød kommune, it is hillerod</summary>
+        /// <summary>ID used when loging in on Dalux. In Hillerød municipality, it is hillerod</summary>
         [ConfigSecret(NotSet = NotSet.ThrowError)]
         public string DaluxCustomerId { get; set; }
 
