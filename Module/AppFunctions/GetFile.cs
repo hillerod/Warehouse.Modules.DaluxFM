@@ -87,12 +87,12 @@ namespace Module.AppFunctions
                 pdfStream.CopyTo(memoryStream);
 
                 var fileNamePdf = buildingId + ".pdf";
-                await app.DataLake.SaveStreamAsync(pdfStream, "Drawings/Buildings", fileNamePdf);
+                await app.DataLake.SaveStreamAsync(pdfStream, "Drawings/Buildings", fileNamePdf, Bygdrift.DataLakeTools.FolderStructure.DatePath);
 
                 var pdfToDrawio = new Bygdrift.PdfToDrawio.Convert(memoryStream, Format.PDF);
                 var fileNameDrawio = buildingId + ".drawio";
                 var drawioStream = pdfToDrawio.ToDrawIo();
-                await app.DataLake.SaveStreamAsync(drawioStream, "Drawings/Buildings", fileNameDrawio);
+                await app.DataLake.SaveStreamAsync(drawioStream, "Drawings/Buildings", fileNameDrawio, Bygdrift.DataLakeTools.FolderStructure.DatePath);
 
                 if (extension == ".drawio")
                 {

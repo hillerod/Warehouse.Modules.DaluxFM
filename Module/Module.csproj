@@ -10,7 +10,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Bygdrift.PdfToDrawio" Version="0.1.1" />
-		<PackageReference Include="Bygdrift.Warehouse" Version="0.6.2" />
+		<PackageReference Include="Bygdrift.Warehouse" Version="0.6.4" />
 		<PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.0.1" />
 		<PackageReference Include="System.ServiceModel.Http" Version="4.8.1" />
 

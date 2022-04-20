@@ -56,6 +56,7 @@ namespace Module.AppFunctions
             await LotsRefine.RefineAsync(App, estatesXmlStream);
             await RoomsRefine.RefineAsync(App, estatesXmlStream);
             await AssetsRefine.RefineAsync(App, assetsXmlStream, estatesRefineCsv, buildingsRefineCsv);
+            App.Mssql.Dispose();
             App.Log.LogInformation("Importing Estates and assets completed.");
         }
     }
