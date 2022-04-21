@@ -16,7 +16,7 @@ namespace Module.AppFunctions
         public AppBase<Settings> App { get; }
 
         [FunctionName(nameof(ImportEstateAndAssetsAsync))]
-        public async Task ImportEstateAndAssetsAsync([TimerTrigger("%ScheduleImportEstatesAndAssets%", RunOnStartup = true)] TimerInfo myTimer)
+        public async Task ImportEstateAndAssetsAsync([TimerTrigger("%ScheduleImportEstatesAndAssets%")] TimerInfo myTimer)
         {
             App.Log.LogInformation("Start importing Estates and assets...");
             var service = new SoapService(App);
