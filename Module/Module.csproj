@@ -3,14 +3,14 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<AzureFunctionsVersion>v4</AzureFunctionsVersion>
 		<OutputType>Library</OutputType>
-		<Version>1.3.5</Version>
+		<Version>1.3.6</Version>
 		<PackageId>Hillerod.Warehouse.Modules.DaluxFM</PackageId>
 		<Authors>Kenboc</Authors>
 		<Company>Hillerod</Company>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Bygdrift.PdfToDrawio" Version="0.1.1" />
-		<PackageReference Include="Bygdrift.Warehouse" Version="0.6.4" />
+		<PackageReference Include="Bygdrift.Warehouse" Version="0.6.5" />
 		<PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.0.1" />
 		<PackageReference Include="System.ServiceModel.Http" Version="4.8.1" />
 

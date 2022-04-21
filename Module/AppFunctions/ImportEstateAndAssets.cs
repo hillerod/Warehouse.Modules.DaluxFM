@@ -16,7 +16,7 @@ namespace Module.AppFunctions
         public AppBase<Settings> App { get; }
 
         [FunctionName(nameof(ImportEstateAndAssetsAsync))]
-        public async Task ImportEstateAndAssetsAsync([TimerTrigger("%Setting--ScheduleImportEstatesAndAssets%")] TimerInfo myTimer)
+        public async Task ImportEstateAndAssetsAsync([TimerTrigger("%ScheduleImportEstatesAndAssets%", RunOnStartup = true)] TimerInfo myTimer)
         {
             App.Log.LogInformation("Start importing Estates and assets...");
             var service = new SoapService(App);
@@ -24,30 +24,30 @@ namespace Module.AppFunctions
             using var assetsXmlStream = new MemoryStream();
 
             App.Log.LogInformation("Loading data from Dalux");
-            if (App.DataLake.FileExist("Raw", "Estates.xml", FolderStructure.DatePath))
-            {
-                var streamIn = App.DataLake.GetFile("Raw", "Estates.xml", FolderStructure.DatePath);
-                if (streamIn.Length > 0)
-                    streamIn.Stream.CopyTo(estatesXmlStream);
-            }
-            else
+
+
+            if (!LoadFromDataLake("Raw", "Estates.xml", FolderStructure.DatePath, estatesXmlStream))
             {
                 var streamIn = await service.GetEstatesAsync();
-                streamIn.CopyTo(estatesXmlStream);
-                await App.DataLake.SaveStreamAsync(estatesXmlStream, "Raw", "Estates.xml", FolderStructure.DatePath);
+                if (streamIn.Length > 200)
+                {
+                    streamIn.CopyTo(estatesXmlStream);
+                    await App.DataLake.SaveStreamAsync(estatesXmlStream, "Raw", "Estates.xml", FolderStructure.DatePath);
+                }
+                else
+                    App.Log.LogError("The xml from Estates was very short:", estatesXmlStream.Length);
             }
 
-            if (App.DataLake.FileExist("Raw", "Assets.xml", FolderStructure.DatePath))
-            {
-                var streamIn = App.DataLake.GetFile("Raw", "Assets.xml", FolderStructure.DatePath);
-                if (streamIn.Length > 0)
-                    streamIn.Stream.CopyTo(assetsXmlStream);
-            }
-            else
+            if (!LoadFromDataLake("Raw", "Assets.xml", FolderStructure.DatePath, assetsXmlStream))
             {
                 var streamIn = await service.GetAssetsAsync();
-                streamIn.CopyTo(assetsXmlStream);
-                await App.DataLake.SaveStreamAsync(assetsXmlStream, "Raw", "Assets.xml", FolderStructure.DatePath);
+                if (streamIn.Length > 200)
+                {
+                    streamIn.CopyTo(assetsXmlStream);
+                    await App.DataLake.SaveStreamAsync(assetsXmlStream, "Raw", "Assets.xml", FolderStructure.DatePath);
+                }
+                else
+                    App.Log.LogError("The xml from Assets was very short:", estatesXmlStream.Length);
             }
 
             var drawingsAreImported = !string.IsNullOrEmpty(App.Settings.DownloadFileApiKey);  //Determines if drawings, frequently will be uploadet to datalake
@@ -58,6 +58,22 @@ namespace Module.AppFunctions
             await AssetsRefine.RefineAsync(App, assetsXmlStream, estatesRefineCsv, buildingsRefineCsv);
             App.Mssql.Dispose();
             App.Log.LogInformation("Importing Estates and assets completed.");
+        }
+
+        private bool LoadFromDataLake(string basePath, string fileName, FolderStructure folderStructure, MemoryStream stream)
+        {
+            if (App.DataLake.FileExist(basePath, fileName, folderStructure))
+            {
+                var streamIn = App.DataLake.GetFile(basePath, fileName, folderStructure);
+                if (streamIn.Length > 200)
+                {
+                    streamIn.Stream.CopyTo(stream);
+                    return true;
+                }
+                else
+                    App.Log.LogError($"The xml from {fileName} was very short:", streamIn.Length);
+            }
+            return false;
         }
     }
 }

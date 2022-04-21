@@ -5,7 +5,7 @@
 	</PropertyGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="Bygdrift.Warehouse" Version="0.6.4" />
+		<PackageReference Include="Bygdrift.Warehouse" Version="0.6.5" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
 		<PackageReference Include="Moq" Version="4.16.1" />
 		<PackageReference Include="MSTest.TestAdapter" Version="2.2.5">
