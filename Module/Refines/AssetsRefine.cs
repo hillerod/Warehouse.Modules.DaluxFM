@@ -34,7 +34,7 @@ namespace Module.Refines
 
             var daluxGenericWash = new GenericHelper();
 
-            var r = 0;
+            var r = 1;
             foreach (var element in data.Root.Elements())
             {
                 daluxGenericWash.AddAttributes(r, element, csv);

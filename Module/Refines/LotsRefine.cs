@@ -30,7 +30,7 @@ namespace Module.Refines
         {
             stream.Position = 0;
             var data = XDocument.Load(stream);
-            var r = 0;
+            var r = 1;
             var genericHelper = new GenericHelper();
             foreach (var item in data.Root.Descendants("Lot"))
             {

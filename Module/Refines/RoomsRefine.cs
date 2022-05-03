@@ -28,7 +28,7 @@ namespace Module.Refines
         {
             stream.Position = 0;
             var data = XDocument.Load(stream);
-            var row = 0;
+            var r = 1;
             var genericHelper = new GenericHelper();
 
             foreach (var building in data.Root.Descendants("Building"))
@@ -42,11 +42,11 @@ namespace Module.Refines
                     foreach (var floor in drawing.Elements("Floor"))  //FloorMasterID is already added in room, so no need to extract it
                         foreach (var room in floor.Elements("Room"))
                         {
-                            csv.AddRecord(row, estateMasterIdCol, EstateMasterId);
-                            csv.AddRecord(row, buildingMasterIdCol, buildingMasterId);
-                            genericHelper.AddAttributes(row, room, csv);
-                            genericHelper.AddLayerDatas(row, room, csv);
-                            row++;
+                            csv.AddRecord(r, estateMasterIdCol, EstateMasterId);
+                            csv.AddRecord(r, buildingMasterIdCol, buildingMasterId);
+                            genericHelper.AddAttributes(r, room, csv);
+                            genericHelper.AddLayerDatas(r, room, csv);
+                            r++;
                         }
             }
         }

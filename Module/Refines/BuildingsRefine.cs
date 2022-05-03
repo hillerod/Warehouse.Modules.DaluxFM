@@ -33,16 +33,16 @@ namespace Module.Refines
             stream.Position = 0;
             var data = XDocument.Load(stream);
 
-            var row = 0;
+            var r = 1;
             var genericHelper = new GenericHelper();
             foreach (var item in data.Root.Descendants("Building"))
             {
-                genericHelper.AddAttributes(row, item, csv, new string[] { "GisPolygon" });
-                AddDrawingLink(moduleBasePath, apiKey, drawingsAreImported, row, item);
-                AddBuildingGps(row, item);
-                AddBBR(row, item);
-                genericHelper.AddLayerDatas(row, item, csv);
-                row++;
+                genericHelper.AddAttributes(r, item, csv, new string[] { "GisPolygon" });
+                AddDrawingLink(moduleBasePath, apiKey, drawingsAreImported, r, item);
+                AddBuildingGps(r, item);
+                AddBBR(r, item);
+                genericHelper.AddLayerDatas(r, item, csv);
+                r++;
             }
         }
 

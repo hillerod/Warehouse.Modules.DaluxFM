@@ -28,11 +28,11 @@
 		  <HintPath>..\..\..\..\..\Bygdrift\Warehouse\Warehouse\bin\Debug\net6.0\Bygdrift.Warehouse.dll</HintPath>
 		</Reference>-->
 	</ItemGroup>
-	<ItemGroup>
+	<!--<ItemGroup>
 	  <Reference Include="PdfToDrawio">
 	    <HintPath>..\..\..\..\..\Bygdrift\PdfToDrawio\PdfToDrawio\bin\Debug\net6.0\PdfToDrawio.dll</HintPath>
 	  </Reference>
-	</ItemGroup>
+	</ItemGroup>-->
 
 	<ItemGroup>
 		<None Update="host.json">
