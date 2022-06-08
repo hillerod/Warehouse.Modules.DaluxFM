@@ -20,7 +20,7 @@ namespace Module.Refines
 
             CreateCsv(xmlStream);
             await app.DataLake.SaveCsvAsync(csv, "Refined", "Rooms.csv", FolderStructure.DatePath);
-            app.Mssql.MergeCsv(csv, "Rooms", "MasterID", true, true);
+            app.Mssql.InserCsv(csv, "Rooms", true, false);
             return csv;
         }
 
@@ -34,9 +34,9 @@ namespace Module.Refines
             foreach (var building in data.Root.Descendants("Building"))
             {
                 var EstateMasterId = (int)building.Attribute("EstateMasterID");
-                var estateMasterIdCol = csv.GetOrCreateHeader("EstateMasterID");
+                csv.AddHeader("EstateMasterID", false, out int estateMasterIdCol);
                 var buildingMasterId = (int)building.Attribute("MasterID");
-                var buildingMasterIdCol = csv.GetOrCreateHeader("BuildingMasterID");
+                csv.AddHeader("BuildingMasterID", false, out int buildingMasterIdCol);
 
                 foreach (var drawing in building.Elements("Drawing"))
                     foreach (var floor in drawing.Elements("Floor"))  //FloorMasterID is already added in room, so no need to extract it

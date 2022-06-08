@@ -24,7 +24,8 @@ namespace Module.Refines
 
             CreateCsv(xmlStream, drawingsAreImported, moduleBasePath, app.Settings.DownloadFileApiKey);
             await app.DataLake.SaveCsvAsync(csv, "Refined", "Buildings.csv", FolderStructure.DatePath);
-            app.Mssql.MergeCsv(csv, "Buildings", "MasterID", true, true);
+            app.Mssql.InserCsv(csv, "Buildings", true, false);
+
             return csv;
         }
 
@@ -48,20 +49,20 @@ namespace Module.Refines
 
         private static void AddDrawingLink(string moduleBasePath, string apiKey, bool drawingsAreImported, int row, XElement element)
         {
-            var drawingsCol = csv.GetOrCreateHeader("Drawings");
+            csv.AddHeader("Drawings", false, out int drawingsCol);
             var drawingsCount = element.Elements("Drawing").Count();
             csv.AddRecord(row, drawingsCol, drawingsCount);
 
             if (drawingsAreImported && drawingsCount > 0)
             {
-                var drawingLinkCol = csv.GetOrCreateHeader("Drawing link");
-                var diagramLinkCol = csv.GetOrCreateHeader("Diagram link");
+                csv.AddHeader("Drawing link", false, out int drawingLinkCol);
+                csv.AddHeader("Drawio link", false, out int diagramLinkCol);
                 var buildingId = element.Attribute("MasterID").Value;
                 var drawingUrl = $"https://{moduleBasePath}/api/getFile?filepath=Drawings%2FBuildings%2F{buildingId}.pdf&apikey={apiKey}";
                 var drawioUrl = $"https://{moduleBasePath}/api/getFile?filepath=Drawings%2FBuildings%2F{buildingId}.drawio&raw=1&apikey={apiKey}";
-                var diagramUrl = "https://app.diagrams.net/#U" + HttpUtility.UrlEncode(drawioUrl);
+                //var diagramUrl = "https://app.diagrams.net/#U" + HttpUtility.UrlEncode(drawioUrl);  //It takes to long time to download the file, so drawio times out.
                 csv.AddRecord(row, drawingLinkCol, drawingUrl);
-                csv.AddRecord(row, diagramLinkCol, diagramUrl);
+                csv.AddRecord(row, diagramLinkCol, drawioUrl);
             }
         }
 
@@ -73,8 +74,8 @@ namespace Module.Refines
 
             if (GIS.GetGISGravityPoint(coords, out (double Lat, double Lon) gps))
             {
-                var latCol = csv.GetOrCreateHeader("GISLat");
-                var lonCol = csv.GetOrCreateHeader("GISLon");
+                csv.AddHeader("GISLat", false,out int latCol);
+                csv.AddHeader("GISLon", false, out int lonCol);
                 csv.AddRecord(row, latCol, gps.Lat);
                 csv.AddRecord(row, lonCol, gps.Lon);
             }
@@ -93,7 +94,7 @@ namespace Module.Refines
             if (elem != null)
                 foreach (var item in elem.Attributes())
                 {
-                    var col = csv.GetOrCreateHeader(item.Name.ToString());
+                    csv.AddHeader(item.Name.ToString(), false, out int col);
                     csv.AddRecord(row, col, item.Value);
                 }
         }

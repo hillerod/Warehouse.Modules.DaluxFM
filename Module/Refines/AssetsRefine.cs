@@ -23,7 +23,7 @@ namespace Module.Refines
 
             CreateCsv(app, xmlStream, estatesCsv, buildingsCsv);
             await app.DataLake.SaveCsvAsync(csv, "Refined", "Assets.csv", FolderStructure.DatePath);
-            app.Mssql.MergeCsv(csv, "Assets", "DatabaseID", true, true);
+            app.Mssql.InserCsv(csv, "Assets", true, false);
             return csv;
         }
 

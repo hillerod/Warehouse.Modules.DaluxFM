@@ -197,13 +197,13 @@ The folder `Refine` contains the refined data as csv - one folder for each day. 
 + Raw
     - {yyyy the year}
         - {MM the month}
-            - {dd the month}
+            - {dd the day}
                 - Assets.xml
                 - Estates.xml
 + Refined
     - {yyyy the year}
         - {MM the month}
-            - {dd the month}
+            - {dd the day}
                 - Assets.csv
                 - Buildings.csv
                 - Estates.csv

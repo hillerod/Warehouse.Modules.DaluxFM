@@ -22,7 +22,7 @@ namespace Module.Refines
 
             CreateCsv(xmlStream);
             await app.DataLake.SaveCsvAsync(csv, "Refined", "Lots.csv", FolderStructure.DatePath);
-            app.Mssql.MergeCsv(csv, "Lots", "MasterID", true, true);
+            app.Mssql.InserCsv(csv, "Lots", true, false);
             return csv;
         }
 
@@ -54,8 +54,8 @@ namespace Module.Refines
 
             if (GIS.GetGISGravityPoint(coords, out (double Lat, double Lon) gps))
             {
-                var latCol = csv.GetOrCreateHeader("GISLat");
-                var lonCol = csv.GetOrCreateHeader("GISLon");
+                csv.AddHeader("GISLat", false, out int latCol);
+                csv.AddHeader("GISLon", false, out int lonCol);
                 csv.AddRecord(row, latCol, gps.Lat);
                 csv.AddRecord(row, lonCol, gps.Lon);
             }

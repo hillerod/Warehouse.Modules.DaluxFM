@@ -22,7 +22,7 @@ namespace Module.Refines.Helpers
                         col = attributeHeaders[atr.Name];
                     else
                     {
-                        col = csv.GetOrCreateHeader(atr.Name.ToString());
+                        csv.AddHeader(atr.Name.ToString(), false, out col);
                         attributeHeaders.Add(atr.Name, col);
                     }
                     csv.AddRecord(r, col, atr.Value);
