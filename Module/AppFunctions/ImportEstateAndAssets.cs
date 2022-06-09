@@ -52,10 +52,10 @@ namespace Module.AppFunctions
 
             var drawingsAreImported = !string.IsNullOrEmpty(App.Settings.DownloadFileApiKey);  //Determines if drawings, frequently will be uploadet to datalake
             var buildingsRefineCsv = await BuildingsRefine.RefineAsync(App, estatesXmlStream, drawingsAreImported, App.HostName);
-            var estatesRefineCsv = await EstatesRefine.RefineAsync(App, estatesXmlStream, buildingsRefineCsv);
-            await LotsRefine.RefineAsync(App, estatesXmlStream);
-            await RoomsRefine.RefineAsync(App, estatesXmlStream);
-            await AssetsRefine.RefineAsync(App, assetsXmlStream, estatesRefineCsv, buildingsRefineCsv);
+            //var estatesRefineCsv = await EstatesRefine.RefineAsync(App, estatesXmlStream, buildingsRefineCsv);
+            //await LotsRefine.RefineAsync(App, estatesXmlStream);
+            //await RoomsRefine.RefineAsync(App, estatesXmlStream);
+            //await AssetsRefine.RefineAsync(App, assetsXmlStream, estatesRefineCsv, buildingsRefineCsv);
             App.Mssql.Dispose();
             App.Log.LogInformation("Importing Estates and assets completed.");
         }

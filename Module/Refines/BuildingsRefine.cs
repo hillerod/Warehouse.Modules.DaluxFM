@@ -17,6 +17,34 @@ namespace Module.Refines
 
         public static async Task<Csv> RefineAsync(AppBase<Settings> app, Stream xmlStream, bool drawingsAreImported, string moduleBasePath)
         {
+            moduleBasePath = moduleBasePath.Trim('/');
+
+            CreateCsv(xmlStream, drawingsAreImported, moduleBasePath, app.Settings.DownloadFileApiKey);
+
+            var csvNew = new Csv();
+            csvNew.AddHeaders(csv.Headers);
+
+            for (int i = 1; i <= csv.RowCount; i++)
+            {
+                var a = csv.GetRowRecords(1);
+                csvNew.AddRow(a);
+                app.Log.LogInformation($"Loading buildings row {i}");
+                app.Mssql.InserCsv(csvNew, "Buildings", true, false);
+
+                var errors = app.Log.GetErrorsAndCriticals();
+                if (errors.Any())
+                {
+                    app.Log.LogInformation($"ERROR!!! Loading buildings row {i}");
+
+                }
+            }
+
+            return csv;
+        }
+
+
+        public static async Task<Csv> RefineAsyncOrig(AppBase<Settings> app, Stream xmlStream, bool drawingsAreImported, string moduleBasePath)
+        {
             app.Log.LogInformation("Loading buildings");
             moduleBasePath = moduleBasePath.Trim('/');
             if (xmlStream == null)
@@ -74,7 +102,7 @@ namespace Module.Refines
 
             if (GIS.GetGISGravityPoint(coords, out (double Lat, double Lon) gps))
             {
-                csv.AddHeader("GISLat", false,out int latCol);
+                csv.AddHeader("GISLat", false, out int latCol);
                 csv.AddHeader("GISLon", false, out int lonCol);
                 csv.AddRecord(row, latCol, gps.Lat);
                 csv.AddRecord(row, lonCol, gps.Lon);

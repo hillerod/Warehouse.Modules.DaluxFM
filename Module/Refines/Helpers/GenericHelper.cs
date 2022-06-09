@@ -39,18 +39,15 @@ namespace Module.Refines.Helpers
                 var name = layerData.Attribute("Name").Value;
                 var value = layerData.Attribute("Value").Value;
 
-                if (name != "LastDrawingChange")
+                if (!layerHeaders.ContainsKey(id))
                 {
-                    if (!layerHeaders.ContainsKey(id))
-                    {
-                        csv.AddHeader(name, out col);
-                        layerHeaders.Add(id, col);
-                    }
-                    else
-                        col = layerHeaders[id];
-
-                    csv.AddRecord(r, col, value);
+                    csv.AddHeader(name, out col);
+                    layerHeaders.Add(id, col);
                 }
+                else
+                    col = layerHeaders[id];
+
+                csv.AddRecord(r, col, value);
             }
         }
     }
