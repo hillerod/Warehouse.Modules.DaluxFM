@@ -26,7 +26,7 @@ namespace Module.Refines
 
             for (int i = 1; i <= csv.RowCount; i++)
             {
-                var a = csv.GetRowRecords(1);
+                var a = csv.GetRowRecords(i);
                 csvNew.AddRow(a);
                 app.Log.LogInformation($"Loading buildings row {i}");
 

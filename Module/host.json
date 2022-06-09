@@ -1,11 +1,11 @@
 {
   "version": "2.0",
   "logging": {
-    "logLevel": {
-      "Module.AppFunctions.ImportEstateAndAssets": "Information",
-      "Module.AppFunctions.GetFile": "Information"
-      //"default": "Information"  //Better to use Namespace.Class.Method, instead of this because it returns a lot information
-    },
+    //"logLevel": {
+    //  "Module.AppFunctions.ImportEstateAndAssets": "Information",
+    //  "Module.AppFunctions.GetFile": "Information"
+    //  //"default": "Information"  //Better to use Namespace.Class.Method, instead of this because it returns a lot information
+    //},
     "applicationInsights": {
       "samplingSettings": {
         "isEnabled": true,
