@@ -29,13 +29,16 @@ namespace Module.Refines
                 var a = csv.GetRowRecords(1);
                 csvNew.AddRow(a);
                 app.Log.LogInformation($"Loading buildings row {i}");
-                app.Mssql.InserCsv(csvNew, "Buildings", true, false);
 
-                var errors = app.Log.GetErrorsAndCriticals();
-                if (errors.Any())
+                if (i > 25)
+                    app.Mssql.InserCsv(csvNew, "Buildings", true, false);
+
+                app.Log.LogInformation($"buildings row {i} loaded.");
+
+                if (app.Log.HasErrorsOrCriticals())
                 {
-                    app.Log.LogInformation($"ERROR!!! Loading buildings row {i}");
-
+                    app.Log.LogCritical($"ERROR!!! Loading buildings row {i}.");
+                    break;
                 }
             }
 
