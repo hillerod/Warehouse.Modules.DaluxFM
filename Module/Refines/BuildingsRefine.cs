@@ -30,10 +30,8 @@ namespace Module.Refines
                 csvNew.AddRow(a);
                 app.Log.LogInformation($"Loading buildings row {i}");
 
-                if (i > 25)
+                if (i > 100)
                     app.Mssql.InserCsv(csvNew, "Buildings", true, false);
-
-                app.Log.LogInformation($"buildings row {i} loaded.");
 
                 if (app.Log.HasErrorsOrCriticals())
                 {
