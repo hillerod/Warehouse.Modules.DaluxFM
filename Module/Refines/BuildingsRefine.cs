@@ -13,38 +13,9 @@ namespace Module.Refines
 {
     public class BuildingsRefine
     {
-        private static readonly Csv csv = new();
+        private readonly Csv csv = new();
 
-        public static async Task<Csv> RefineAsync(AppBase<Settings> app, Stream xmlStream, bool drawingsAreImported, string moduleBasePath)
-        {
-            moduleBasePath = moduleBasePath.Trim('/');
-
-            CreateCsv(xmlStream, drawingsAreImported, moduleBasePath, app.Settings.DownloadFileApiKey);
-
-            var csvNew = new Csv();
-            csvNew.AddHeaders(csv.Headers);
-
-            for (int i = 1; i <= csv.RowCount; i++)
-            {
-                var a = csv.GetRowRecords(i);
-                csvNew.AddRow(a);
-                app.Log.LogInformation($"Loading buildings row {i}");
-
-                if (i > 100)
-                    app.Mssql.InserCsv(csvNew, "Buildings", true, false);
-
-                if (app.Log.HasErrorsOrCriticals())
-                {
-                    app.Log.LogCritical($"ERROR!!! Loading buildings row {i}.");
-                    break;
-                }
-            }
-
-            return csv;
-        }
-
-
-        public static async Task<Csv> RefineAsyncOrig(AppBase<Settings> app, Stream xmlStream, bool drawingsAreImported, string moduleBasePath)
+        public async Task<Csv> RefineAsync(AppBase<Settings> app, Stream xmlStream, bool drawingsAreImported, string moduleBasePath)
         {
             app.Log.LogInformation("Loading buildings");
             moduleBasePath = moduleBasePath.Trim('/');
@@ -54,11 +25,10 @@ namespace Module.Refines
             CreateCsv(xmlStream, drawingsAreImported, moduleBasePath, app.Settings.DownloadFileApiKey);
             await app.DataLake.SaveCsvAsync(csv, "Refined", "Buildings.csv", FolderStructure.DatePath);
             app.Mssql.InserCsv(csv, "Buildings", true, false);
-
             return csv;
         }
 
-        private static void CreateCsv(Stream stream, bool drawingsAreImported, string moduleBasePath, string apiKey)
+        private void CreateCsv(Stream stream, bool drawingsAreImported, string moduleBasePath, string apiKey)
         {
             stream.Position = 0;
             var data = XDocument.Load(stream);
@@ -76,7 +46,7 @@ namespace Module.Refines
             }
         }
 
-        private static void AddDrawingLink(string moduleBasePath, string apiKey, bool drawingsAreImported, int row, XElement element)
+        private void AddDrawingLink(string moduleBasePath, string apiKey, bool drawingsAreImported, int row, XElement element)
         {
             csv.AddHeader("Drawings", false, out int drawingsCol);
             var drawingsCount = element.Elements("Drawing").Count();
@@ -95,7 +65,7 @@ namespace Module.Refines
             }
         }
 
-        private static void AddBuildingGps(int row, XElement element)
+        private void AddBuildingGps(int row, XElement element)
         {
             var coords = new List<(double Lat, double Lon)>();
             foreach (var coord in element.Element("GIS").Element("OuterPolygon").Elements("Coordinate"))
@@ -117,7 +87,7 @@ namespace Module.Refines
             //}
         }
 
-        private static void AddBBR(int row, XElement element)
+        private void AddBBR(int row, XElement element)
         {
             var elem = element.Element("Bbr_bygning");
             if (elem != null)
