@@ -212,6 +212,9 @@ The folder `Refine` contains the refined data as csv - one folder for each day. 
 
 # Updates
 
+## 1.4.5
+Bug in Warehouse 1.0.4, so decimals wasn't translated correct.
+
 ## 1.3.5
 
 In 1.3.4, all user settings should have a prefix of 'Setting--'. That has been removed, so when upgrading from 1.3.4, then go this module's Configuration and change these app settings:

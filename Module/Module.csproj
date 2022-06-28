@@ -3,7 +3,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<AzureFunctionsVersion>v4</AzureFunctionsVersion>
 		<OutputType>Library</OutputType>
-		<Version>1.4.4</Version>
+		<Version>1.4.5</Version>
 		<PackageId>Hillerod.Warehouse.Modules.DaluxFM</PackageId>
 		<Authors>Kenboc</Authors>
 		<Company>Hillerod</Company>
