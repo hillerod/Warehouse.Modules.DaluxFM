@@ -1,5 +1,5 @@
-﻿using Bygdrift.CsvTools;
-using Bygdrift.DataLakeTools;
+﻿using Bygdrift.Tools.CsvTool;
+using Bygdrift.Tools.DataLakeTool;
 using Bygdrift.Warehouse;
 using Module.Refines.Helpers;
 using System.IO;
@@ -20,7 +20,7 @@ namespace Module.Refines
 
             CreateCsv(xmlStream);
             await app.DataLake.SaveCsvAsync(csv, "Refined", "Rooms.csv", FolderStructure.DatePath);
-            app.Mssql.InserCsv(csv, "Rooms", true, false);
+            app.Mssql.InsertCsv(csv, "Rooms", true);
             return csv;
         }
 

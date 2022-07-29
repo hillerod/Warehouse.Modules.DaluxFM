@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
-using Bygdrift.CsvTools;
 using System.Linq;
-using System.Web;
 using System.Threading.Tasks;
 using Bygdrift.Warehouse;
-using Bygdrift.DataLakeTools;
 using Module.Refines.Helpers;
+using Bygdrift.Tools.CsvTool;
+using Bygdrift.Tools.DataLakeTool;
 
 namespace Module.Refines
 {
@@ -24,7 +23,7 @@ namespace Module.Refines
 
             CreateCsv(xmlStream, drawingsAreImported, moduleBasePath, app.Settings.DownloadFileApiKey);
             await app.DataLake.SaveCsvAsync(csv, "Refined", "Buildings.csv", FolderStructure.DatePath);
-            app.Mssql.InserCsv(csv, "Buildings", true, false);
+            app.Mssql.InsertCsv(csv, "Buildings", true);
             return csv;
         }
 

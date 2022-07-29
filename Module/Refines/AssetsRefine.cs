@@ -3,11 +3,11 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using System;
-using Bygdrift.CsvTools;
 using Bygdrift.Warehouse;
 using System.Threading.Tasks;
-using Bygdrift.DataLakeTools;
 using Module.Refines.Helpers;
+using Bygdrift.Tools.CsvTool;
+using Bygdrift.Tools.DataLakeTool;
 
 namespace Module.Refines
 {
@@ -23,7 +23,7 @@ namespace Module.Refines
 
             CreateCsv(app, xmlStream, estatesCsv, buildingsCsv);
             await app.DataLake.SaveCsvAsync(csv, "Refined", "Assets.csv", FolderStructure.DatePath);
-            app.Mssql.InserCsv(csv, "Assets", true, false);
+            app.Mssql.InsertCsv(csv, "Assets", true);
             return csv;
         }
 

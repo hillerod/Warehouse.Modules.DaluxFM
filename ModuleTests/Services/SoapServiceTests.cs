@@ -1,4 +1,4 @@
-﻿using Bygdrift.DataLakeTools;
+﻿using Bygdrift.Tools.DataLakeTool;
 using Bygdrift.Warehouse;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Module.Services;

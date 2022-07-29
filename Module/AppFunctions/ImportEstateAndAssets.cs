@@ -1,4 +1,4 @@
-﻿using Bygdrift.DataLakeTools;
+﻿using Bygdrift.Tools.DataLakeTool;
 using Bygdrift.Warehouse;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;

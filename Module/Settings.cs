@@ -1,4 +1,4 @@
-﻿using Bygdrift.Warehouse.Helpers.Attributes;
+﻿using Bygdrift.Warehouse.Attributes;
 using Newtonsoft.Json;
 
 namespace Module

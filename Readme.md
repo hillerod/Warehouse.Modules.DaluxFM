@@ -212,6 +212,9 @@ The folder `Refine` contains the refined data as csv - one folder for each day. 
 
 # Updates
 
+## 1.5.0
+The Warehouse engine has been revitalized and are for examople much better on writing to database.
+
 ## 1.4.5
 Bug in Warehouse 1.0.4, so decimals wasn't translated correct.
 

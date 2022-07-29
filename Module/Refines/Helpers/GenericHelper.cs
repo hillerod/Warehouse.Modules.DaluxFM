@@ -1,7 +1,6 @@
-﻿using Bygdrift.CsvTools;
+﻿using Bygdrift.Tools.CsvTool;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Xml.Linq;
 
 namespace Module.Refines.Helpers
