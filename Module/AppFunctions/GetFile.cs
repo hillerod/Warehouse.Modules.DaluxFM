@@ -1,4 +1,4 @@
-using Bygdrift.PdfToDrawio;
+using Bygdrift.Tools.PdfToDrawio.Models;
 using Bygdrift.Warehouse;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +8,6 @@ using Microsoft.Extensions.Logging;
 using Module.Services;
 using System;
 using System.IO;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -89,7 +88,7 @@ namespace Module.AppFunctions
                 var fileNamePdf = buildingId + ".pdf";
                 await app.DataLake.SaveStreamAsync(pdfStream, "Drawings/Buildings", fileNamePdf, Bygdrift.Tools.DataLakeTool.FolderStructure.DatePath);
 
-                var pdfToDrawio = new Bygdrift.PdfToDrawio.Convert(memoryStream, Format.PDF);
+                var pdfToDrawio = new Bygdrift.Tools.PdfToDrawio.Convert(memoryStream, Format.PDF);
                 var fileNameDrawio = buildingId + ".drawio";
                 var drawioStream = pdfToDrawio.ToDrawIo();
                 await app.DataLake.SaveStreamAsync(drawioStream, "Drawings/Buildings", fileNameDrawio, Bygdrift.Tools.DataLakeTool.FolderStructure.DatePath);
